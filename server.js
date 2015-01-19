@@ -29,6 +29,7 @@ var app = express();
 var port = process.env.PORT || 5000; 
 app.use(cors());
 app.use('/api', baucis());
+app.use('/bower_components', express.static(__dirname + '/bower_components'));
 app.use('/', express.static(__dirname + '/dist'));
 app.listen(port, function() {
 	console.log('Express (' + app.get('env') + ') server listening on port ' + port);
