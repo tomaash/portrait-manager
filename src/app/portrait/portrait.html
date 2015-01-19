@@ -1,0 +1,10 @@
+<div class="container col-lg-3">
+	<h2>People</h2>
+	<p ng-repeat="person in vm.people">{{person.name}}</p>
+	<form role="form">
+		<div class="form-group">
+			<label for="name">Name:</label>
+			<input ng-model="vm.currentPerson.name" type="name" class="form-control" id="name" placeholder="Enter name"></div>
+	</form>
+	<button class="btn btn-success" ng-click="vm.addPerson()"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</button>
+</div>
