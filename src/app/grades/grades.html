@@ -1,0 +1,19 @@
+<div class="container">
+
+	<div ng-include="'components/navbar/navbar.html'"></div>
+
+	<div class="container col-lg-3">
+		<h2>Grades</h2>
+		<p ng-repeat="person in vm.grades">{{grade.name}}</p>
+		<form role="form">
+			<div class="form-group">
+				<label for="name">Name:</label>
+				<input ng-model="vm.currentGrade.name" type="name" class="form-control" id="name" placeholder="Enter name"></div>
+			<br/>
+		</form>
+		<button class="btn btn-success" ng-click="vm.addGrade()">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+			Add
+		</button>
+	</div>
+</div>
