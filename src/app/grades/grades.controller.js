@@ -4,50 +4,49 @@ angular.module('portraitManager')
   .controller('GradesCtrl', function($scope, $upload, Restangular) {
 
     var vm = this;
-    vm.currentPerson = {};
+    vm.currentItem = {};
+    vm.editMode = false;
 
-    var people = Restangular.all('people');
+    var resource = Restangular.all('grades');
 
-    // This will query accounts and return a promise.
     vm.reload = function() {
-      people.getList().then(function(people) {
-        vm.people = people;
+      resource.getList().then(function(data) {
+        vm.collection = data;
       });
     };
 
-    vm.addPerson = function() {
-      people.post(vm.currentPerson);
-      vm.reload();
+    vm.edit = function(item) {
+      vm.currentItem = Restangular.copy(item);
+      vm.editMode = true;
     };
 
-    vm.fileSelected = function(files, event) {
-      console.log(files);
-      console.log(event);
+    vm.create = function() {
+      console.log(vm.currentItem);
+      resource.post(vm.currentItem).then(function() {
+        vm.currentItem = {};
+        vm.reload();
+      });
+    };
+
+    vm.update = function() {
+      vm.currentItem.put().then(function() {
+        vm.currentItem = {};
+        vm.editMode = false;
+        vm.reload();
+      });
+    };
+
+    vm.destroy = function(item) {
+      item.remove().then(function() {
+        vm.reload();
+      });
+    };
+
+    vm.cancel = function() {
+      vm.editMode = false;
+      vm.currentItem = {};
     };
 
     vm.reload();
 
-    vm.upload = function() {
-      $upload.upload({
-        url: '/upload', // upload.php script, node.js route, or servlet url
-        //method: 'POST' or 'PUT',
-        //headers: {'Authorization': 'xxx'}, // only for html5
-        //withCredentials: true,
-        data: {
-          personId: 'foo'
-        },
-        file: vm.file[0], // single file or a list of files. list is only for html5
-        //fileName: 'doc.jpg' or ['1.jpg', '2.jpg', ...] // to modify the name of the file(s)
-        //fileFormDataName: myFile, // file formData name ('Content-Disposition'), server side request form name
-        // could be a list of names for multiple files (html5). Default is 'file'
-        //formDataAppender: function(formData, key, val){}  // customize how data is added to the formData. 
-        // See #40#issuecomment-28612000 for sample code
-
-      }).progress(function(evt) {
-        console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :' + evt.config.file.name);
-      }).success(function(data, status, headers, config) {
-        // file is uploaded successfully
-        console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
-      });
-    };
   });

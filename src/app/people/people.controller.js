@@ -4,24 +4,21 @@ angular.module('portraitManager')
   .controller('PeopleCtrl', function($scope, $upload, $timeout, Restangular) {
 
     var vm = this;
-
-    vm.fileReaderSupported = window.FileReader != null && (window.FileAPI == null || FileAPI.html5 != false);
-
     vm.currentItem = {};
-
     vm.editMode = false;
 
-    vm.thumbnailUrl = null;
+    var resource = Restangular.all('people');
 
     var generateCacheBuster = function() {
       vm.cachebuster = Math.round(Math.random() * 1000000);
     };
 
-    generateCacheBuster();
+    var refreshCacheTimer = function() {
+      $timeout(function() {
+        generateCacheBuster();
+      }, 10000);
+    };
 
-    var resource = Restangular.all('people');
-
-    // This will query accounts and return a promise.
     vm.reload = function() {
       resource.getList().then(function(data) {
         vm.collection = data;
@@ -42,17 +39,20 @@ angular.module('portraitManager')
         vm.currentItem = {};
         vm.thumbnailUrl = null;
         vm.reload();
+        refreshCacheTimer();
       });
     };
 
     vm.update = function() {
       console.log(vm.currentItem);
+      vm.currentItem.__v += 1;
       vm.uploadIfModified();
       vm.currentItem.put().then(function() {
         vm.currentItem = {};
         vm.editMode = false;
         vm.thumbnailUrl = null;
         vm.reload();
+        refreshCacheTimer();
       });
     };
 
@@ -69,6 +69,15 @@ angular.module('portraitManager')
       vm.currentItem = {};
     };
 
+    vm.reload();
+
+
+    vm.fileReaderSupported = window.FileReader != null && (window.FileAPI == null || FileAPI.html5 != false);
+    vm.thumbnailUrl = null;
+
+
+    generateCacheBuster();
+
     vm.fileSelected = function() {
       var file = vm.file[0];
       console.log(file);
@@ -76,8 +85,6 @@ angular.module('portraitManager')
         vm.generateThumb(file);
       }
     };
-
-    vm.reload();
 
     vm.uploadIfModified = function() {
       if (vm.file) {
@@ -106,24 +113,11 @@ angular.module('portraitManager')
 
     vm.upload = function(itemId) {
       $upload.upload({
-        url: '/upload?personId=' + itemId, // upload.php script, node.js route, or servlet url
-        //method: 'POST' or 'PUT',
-        //headers: {'Authorization': 'xxx'}, // only for html5
-        //withCredentials: true,
-        // data: {
-        //   personId: 'foo'
-        // },
-        file: vm.file[0], // single file or a list of files. list is only for html5
-        //fileName: 'doc.jpg' or ['1.jpg', '2.jpg', ...] // to modify the name of the file(s)
-        //fileFormDataName: myFile, // file formData name ('Content-Disposition'), server side request form name
-        // could be a list of names for multiple files (html5). Default is 'file'
-        //formDataAppender: function(formData, key, val){}  // customize how data is added to the formData. 
-        // See #40#issuecomment-28612000 for sample code
-
+        url: '/upload?personId=' + itemId,
+        file: vm.file[0]
       }).progress(function(evt) {
         console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :' + evt.config.file.name);
       }).success(function(data, status, headers, config) {
-        // file is uploaded successfully
         console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
       });
     };

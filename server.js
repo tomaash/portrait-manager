@@ -93,7 +93,8 @@ var Person = new mongoose.Schema({
 	lastName: String,
 });
 var Teacher = new mongoose.Schema({
-	name: String
+	firstName: String,
+	lastName: String,
 });
 var Grade = new mongoose.Schema({
 	name: String
