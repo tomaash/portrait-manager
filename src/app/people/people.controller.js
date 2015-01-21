@@ -36,7 +36,8 @@ angular.module('portraitManager')
 
     vm.create = function() {
       console.log(vm.currentItem);
-      resource.post(vm.currentItem).then(function() {
+      resource.post(vm.currentItem).then(function(item) {
+        vm.currentItem = item;
         vm.uploadIfModified();
         vm.currentItem = {};
         vm.thumbnailUrl = null;
