@@ -50,6 +50,6 @@
   },
   "scripts": {
     "start": "node server.js",
-    "postinstall": "bower install && gulp build"
+    "postinstallx": "bower install && gulp build"
   }
 }
