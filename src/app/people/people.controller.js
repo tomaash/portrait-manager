@@ -8,6 +8,8 @@ angular.module('portraitManager')
     vm.editMode = false;
 
     var resource = Restangular.all('people');
+    var teachers = Restangular.all('teachers');
+    var grades = Restangular.all('grades');
 
     var generateCacheBuster = function() {
       vm.cachebuster = Math.round(Math.random() * 1000000);
@@ -32,6 +34,15 @@ angular.module('portraitManager')
       });
     };
 
+    vm.getTeachersAndGrades = function () {
+      teachers.getList ().then (function (data) {
+        vm.teachers = data;
+      });
+      grades.getList ().then (function (data) {
+        vm.grades = data;
+      });
+    };
+  
     vm.edit = function(item) {
       console.log('edit');
       console.log(item);
@@ -88,7 +99,7 @@ angular.module('portraitManager')
     };
 
     vm.reload();
-
+    vm.getTeachersAndGrades ();
 
     vm.fileReaderSupported = window.FileReader != null && (window.FileAPI == null || FileAPI.html5 != false);
     vm.thumbnailUrl = null;

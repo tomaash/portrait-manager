@@ -87,7 +87,15 @@ app.get('/image', function(req, res) {
 var Person = new mongoose.Schema({
 	firstName: String,
 	lastName: String,
-	imageId: String
+        imageId: String,
+        teacher: {
+          type: mongoose.Schema.ObjectId,
+          ref: 'teacher'
+        },
+        grade: {
+          type: mongoose.Schema.ObjectId,
+          ref: 'grade'
+        }
 });
 var Teacher = new mongoose.Schema({
 	firstName: String,

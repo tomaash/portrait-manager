@@ -50,6 +50,18 @@
 					<label for="last_name">Last name:</label>
 					<input ng-model="vm.currentItem.lastName" class="form-control" id="last_name"></div>
 				<div class="form-group">
+					<label for="teacher">Teacher:</label>
+					<select ng-options="teacher._id as teacher.lastName + ' ' + teacher.firstName for teacher in vm.teachers" ng-model="vm.currentItem.teacher" class="form-control" id="teacher">
+					  <option value="">-- choose teacher --</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="grade">Grade:</label>
+					<select ng-options="grade._id as grade.name for grade in vm.grades" ng-model="vm.currentItem.grade" class="form-control" id="grade">
+					  <option value="">-- choose grade --</option>
+					</select>
+				</div>
+				<div class="form-group">
 					<label >Photo:</label>
 					<br>
 					<button ng-hide="vm.thumbnailUrl || vm.currentItem.imageId" ng-file-select="" ng-file-change="vm.fileSelected()" class="btn btn-info btn-lg" ng-model="vm.file">Attach</button>
