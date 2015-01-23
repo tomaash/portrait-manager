@@ -52,7 +52,7 @@
 				<div class="form-group">
 					<label >Photo:</label>
 					<br>
-					<button ng-hide="vm.thumbnailUrl || vm.currentItem.imageId" ng-file-select="" ng-file-change="vm.fileSelected()" class="btn btn-info btn-lg" ng-model="vm.file">Attach</button>
+					<button ng-hide="vm.currentItem.thumbnailUrl || vm.currentItem.imageId" ng-file-select="" ng-file-change="vm.fileSelected()" class="btn btn-info btn-lg" ng-model="vm.file">Attach</button>
 					<br>
 					<div class="hover-pointer" ng-file-select="" ng-file-change="vm.fileSelected()" ng-model="vm.file">
 						<img ng-hide="vm.currentItem.thumbnailUrl" style="width:300px;" ng-if="vm.currentItem.imageId" ng-src="/image?id={{vm.currentItem.imageId}}">

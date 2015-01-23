@@ -9,22 +9,17 @@ angular.module('portraitManager')
 
     var resource = Restangular.all('people');
 
-    var generateCacheBuster = function() {
-      vm.cachebuster = Math.round(Math.random() * 1000000);
-    };
+    var PERSON_ATTRIBUTES = [
+      'firstName',
+      'lastName',
+      'imageId'
+    ];
 
-    var setImageIdIfModified = function() {
-      if (vm.file) {
-        var hash = Math.round(Math.random() * 1e16).toString(32);
-        vm.currentItem.imageId = vm.currentItem.imageId || hash;
-      }
+    var updateItem = function(dest, src) {
+      PERSON_ATTRIBUTES.forEach(function(attr) {
+        dest[attr] = src[attr];
+      });
     };
-
-    // var refreshCacheTimer = function() {
-    //   $timeout(function() {
-    //     generateCacheBuster();
-    //   }, 10000);
-    // };
 
     vm.reload = function() {
       resource.getList().then(function(data) {
@@ -33,68 +28,53 @@ angular.module('portraitManager')
     };
 
     vm.edit = function(item) {
-      console.log('edit');
-      console.log(item);
-      generateCacheBuster();
       vm.currentItemReference = item;
       vm.currentItem = Restangular.copy(item);
       vm.editMode = true;
     };
 
     vm.create = function() {
-      console.log(vm.currentItem);
-      setImageIdIfModified();
       vm.uploadIfModified();
       resource.post(vm.currentItem).then(function(item) {
-        vm.currentItem = item;
-        item.thumbnailUrl = vm.thumbnailUrl;
-        vm.currentItemReference = item;
+        item.thumbnailUrl = vm.currentItem.thumbnailUrl;
         vm.collection.push(item);
+
         vm.currentItem = {};
-        vm.thumbnailUrl = null;
-        // vm.reload();
-        // refreshCacheTimer();
+        vm.editMode = false;
+        vm.file = null;
       });
     };
 
     vm.update = function() {
-      console.log(vm.currentItem);
-      // vm.currentItem.__v += 1;
-      setImageIdIfModified();
       vm.uploadIfModified();
       vm.currentItem.put().then(function(item) {
-        console.log('update');
-        console.log(item);
-        vm.currentItemReference = item;
+        vm.currentItemReference.thumbnailUrl = vm.currentItem.thumbnailUrl;
+        updateItem(vm.currentItemReference, item);
+
         vm.currentItem = {};
         vm.editMode = false;
-        vm.thumbnailUrl = null;
-        // vm.reload();
-        // refreshCacheTimer();
+        vm.file = null;
       });
     };
 
     vm.destroy = function(item) {
-      console.log(item);
       item.remove().then(function() {
-        vm.reload();
+        var idx = vm.collection.indexOf(item);
+        if (idx !== -1) {
+          vm.collection.splice(idx, 1);
+        }
       });
     };
 
     vm.cancel = function() {
       vm.editMode = false;
-      vm.thumbnailUrl = null;
       vm.currentItem = {};
     };
 
     vm.reload();
 
-
     vm.fileReaderSupported = window.FileReader != null && (window.FileAPI == null || FileAPI.html5 != false);
-    vm.thumbnailUrl = null;
 
-
-    generateCacheBuster();
 
     vm.fileSelected = function() {
       var file = vm.file[0];
@@ -106,9 +86,11 @@ angular.module('portraitManager')
 
     vm.uploadIfModified = function() {
       if (vm.file) {
+        var hash = Math.round(Math.random() * 1e16).toString(32);
+        vm.currentItem.imageId = vm.currentItem.imageId || hash;
         if (vm.currentItemReference) {
-          vm.currentItemReference.thumbnailUrl = vm.currentItem.thumbnailUrl; 
-          vm.currentItemReference.imageId = vm.currentItem.imageId;  
+          vm.currentItemReference.thumbnailUrl = vm.currentItem.thumbnailUrl;
+          vm.currentItemReference.imageId = vm.currentItem.imageId;
         }
         vm.upload(vm.currentItem.imageId);
       }
@@ -126,7 +108,6 @@ angular.module('portraitManager')
                 console.log('have url');
                 console.log(e.target.result);
                 vm.currentItem.thumbnailUrl = e.target.result;
-                vm.thumbnailUrl = e.target.result;
               });
             };
           });
