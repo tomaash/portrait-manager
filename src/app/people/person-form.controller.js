@@ -1,22 +1,10 @@
 'use strict';
 angular.module('portraitManager')
-  .controller('PersonFormCtrl', function($scope, $timeout, $modalInstance, $upload, Restangular, item) {
+.controller('PersonFormCtrl', function($scope, $timeout, $modalInstance, $upload, Restangular, item, teachers, grades) {
     var vm = this;
     vm.currentItem = item;
-
-    var teachers = Restangular.all('teachers');
-    var grades = Restangular.all('grades');
-
-    vm.getTeachersAndGrades = function() {
-      teachers.getList().then(function(data) {
-        vm.teachers = data;
-      });
-      grades.getList().then(function(data) {
-        vm.grades = data;
-      });
-    };
-
-    vm.getTeachersAndGrades();
+    vm.teachers = teachers;
+    vm.grades = grades;
 
     if (item._id) {
       vm.editMode = true;

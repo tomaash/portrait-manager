@@ -14,6 +14,8 @@ angular.module('portraitManager')
     var PERSON_ATTRIBUTES = [
       'firstName',
       'lastName',
+      'teacher',
+      'grade',
       'imageId'
     ];
 
@@ -21,6 +23,13 @@ angular.module('portraitManager')
       PERSON_ATTRIBUTES.forEach(function(attr) {
         dest[attr] = src[attr];
       });
+    };
+
+    var makeCache = function (list) {
+      return _.reduce (list, function (cache, item) {
+               cache [item._id] = item;
+               return cache;
+             }, {});
     };
 
     vm.reload = function() {
@@ -32,9 +41,11 @@ angular.module('portraitManager')
     vm.getTeachersAndGrades = function () {
       teachers.getList ().then (function (data) {
         vm.teachers = data;
+        vm.teachersCache = makeCache (data);
       });
       grades.getList ().then (function (data) {
         vm.grades = data;
+        vm.gradesCache = makeCache (data);
       });
     };
   
@@ -59,6 +70,12 @@ angular.module('portraitManager')
         resolve: {
           item: function() {
             return vm.currentItem;
+          },
+          teachers: function () {
+            return vm.teachers;
+          },
+          grades: function () {
+            return vm.grades;
           }
         }
       });
