@@ -19,7 +19,10 @@
 					<tr ng-repeat="item in vm.collection">
 						<td>{{item.firstName}}</td>
 						<td>{{item.lastName}}</td>
-						<td><img style="height:20px" ng-src="/image?id={{item._id}}&cache={{vm.cachebuster}}"></td>
+						<td>
+							<img style="height:20px" ng-if="item.imageId && !item.thumbnailUrl" ng-src="/image?id={{item.imageId}}">
+							<img style="height:20px" ng-if="item.thumbnailUrl" ng-src="{{item.thumbnailUrl}}">
+						</td>
 						<td>
 							<!-- <div class="btn-group" role="group">
 							-->
@@ -49,11 +52,11 @@
 				<div class="form-group">
 					<label >Photo:</label>
 					<br>
-					<button ng-hide="vm.thumbnailUrl || vm.currentItem._id" ng-file-select="" ng-file-change="vm.fileSelected()" class="btn btn-info btn-lg" ng-model="vm.file">Attach</button>
+					<button ng-hide="vm.thumbnailUrl || vm.currentItem.imageId" ng-file-select="" ng-file-change="vm.fileSelected()" class="btn btn-info btn-lg" ng-model="vm.file">Attach</button>
 					<br>
 					<div class="hover-pointer" ng-file-select="" ng-file-change="vm.fileSelected()" ng-model="vm.file">
-						<img ng-hide="vm.thumbnailUrl" style="width:300px;" ng-if="vm.currentItem._id" ng-src="/image?id={{vm.currentItem._id}}&cache={{vm.cachebuster}}">
-						<img ng-show="vm.thumbnailUrl" style="width:300px;" ng-if="vm.thumbnailUrl" ng-src="{{vm.thumbnailUrl}}"></div>
+						<img ng-hide="vm.currentItem.thumbnailUrl" style="width:300px;" ng-if="vm.currentItem.imageId" ng-src="/image?id={{vm.currentItem.imageId}}">
+						<img ng-show="vm.currentItem.thumbnailUrl" style="width:300px;" ng-if="vm.currentItem.thumbnailUrl" ng-src="{{vm.currentItem.thumbnailUrl}}"></div>
 				</div>
 
 			</form>
@@ -73,50 +76,9 @@
 				</button>
 			</span>
 
-			<!-- 			<input ng-file-select type="file" ng-file-change="fileSelected($files, $event)" ng-model="vm.picFile">
-			-->
 			<br/>
 			<br/>
 
-			<!-- <button class="btn btn-danger" ng-click="vm.upload()">Upload</button>
-		-->
+		</div>
 	</div>
 </div>
-</div>
-
-<!-- <img src="/image?id=tom">
--->
-<!-- 	<fieldset>
-<legend>Upload right away</legend>
-<div class="up-buttons">
-<div ng-file-select="" ng-model="files" class="upload-button" ng-file-change="upload(files)" ng-multiple="false" ng-accept="'image/*,application/pdf'" tabindex="0">Attach an Image or PDF</div>
-<br>
-<button ng-file-select="" ng-model="files" ng-multiple="true">Attach Any File</button>
-</div>
-<div ng-file-drop="" ng-file-select="" ng-model="files" class="drop-box" drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ng-multiple="true" allow-dir="true" accept="image/*,*pdf">
-Drop Images or PDFs
-<div>here</div>
-</div>
-<div ng-no-file-drop="" class="drop-box">File Farg&amp;Drop not supported on your browser</div>
-</fieldset>
--->
-<!-- <form name="myForm">
-<fieldset>
-<legend>Upload on form submit</legend>
-Username:
-<input type="text" name="userName" ng-model="vm.username" size="48" required=""> <i ng-show="myForm.userName.$error.required">*required</i>
-<br>
-Profile Picture:
-<input type="file" ng-file-select="" ng-model="vm.picFile" name="file" accept="image/*" ng-file-change="generateThumb(picFile[0], $files)" required=""> <i ng-show="myForm.file.$error.required">*required</i>
-<br>
-
-<button ng-disabled="!myForm.$valid" ng-click="uploadPic(vm.picFile)">Submit</button>
-<img ng-show="vm.picFile[0].dataUrl != null" ng-src="{{vm.picFile[0].dataUrl}}" class="thumb">
-<span class="progress" ng-show="vm.picFile[0].progress >
-= 0">
-<div style="width:{{vm.picFile[0].progress}}%" ng-bind="vm.picFile[0].progress + '%'" class="ng-binding"></div>
-</span>
-<span ng-show="vm.picFile[0].result">Upload Successful</span>
-</fieldset>
-<br></form>
--->

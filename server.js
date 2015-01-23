@@ -4,12 +4,8 @@ var baucis = require('baucis');
 var express = require('express');
 var cors = require('cors');
 var gcloud = require('gcloud');
-// var multer = require('multer');
 var Busboy = require('busboy');
 var app = express();
-// var fs = require('fs');
-// var streamBuffers = require('stream-buffers');
-// var Stream = require('stream');
 
 
 if (app.get('env') === 'development') {
@@ -91,6 +87,7 @@ app.get('/image', function(req, res) {
 var Person = new mongoose.Schema({
 	firstName: String,
 	lastName: String,
+	imageId: String
 });
 var Teacher = new mongoose.Schema({
 	firstName: String,

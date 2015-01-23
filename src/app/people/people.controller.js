@@ -13,11 +13,18 @@ angular.module('portraitManager')
       vm.cachebuster = Math.round(Math.random() * 1000000);
     };
 
-    var refreshCacheTimer = function() {
-      $timeout(function() {
-        generateCacheBuster();
-      }, 10000);
+    var setImageIdIfModified = function() {
+      if (vm.file) {
+        var hash = Math.round(Math.random() * 1e16).toString(32);
+        vm.currentItem.imageId = vm.currentItem.imageId || hash;
+      }
     };
+
+    // var refreshCacheTimer = function() {
+    //   $timeout(function() {
+    //     generateCacheBuster();
+    //   }, 10000);
+    // };
 
     vm.reload = function() {
       resource.getList().then(function(data) {
@@ -26,33 +33,44 @@ angular.module('portraitManager')
     };
 
     vm.edit = function(item) {
+      console.log('edit');
+      console.log(item);
       generateCacheBuster();
+      vm.currentItemReference = item;
       vm.currentItem = Restangular.copy(item);
       vm.editMode = true;
     };
 
     vm.create = function() {
       console.log(vm.currentItem);
+      setImageIdIfModified();
+      vm.uploadIfModified();
       resource.post(vm.currentItem).then(function(item) {
         vm.currentItem = item;
-        vm.uploadIfModified();
+        item.thumbnailUrl = vm.thumbnailUrl;
+        vm.currentItemReference = item;
+        vm.collection.push(item);
         vm.currentItem = {};
         vm.thumbnailUrl = null;
-        vm.reload();
-        refreshCacheTimer();
+        // vm.reload();
+        // refreshCacheTimer();
       });
     };
 
     vm.update = function() {
       console.log(vm.currentItem);
-      vm.currentItem.__v += 1;
+      // vm.currentItem.__v += 1;
+      setImageIdIfModified();
       vm.uploadIfModified();
-      vm.currentItem.put().then(function() {
+      vm.currentItem.put().then(function(item) {
+        console.log('update');
+        console.log(item);
+        vm.currentItemReference = item;
         vm.currentItem = {};
         vm.editMode = false;
         vm.thumbnailUrl = null;
-        vm.reload();
-        refreshCacheTimer();
+        // vm.reload();
+        // refreshCacheTimer();
       });
     };
 
@@ -88,7 +106,11 @@ angular.module('portraitManager')
 
     vm.uploadIfModified = function() {
       if (vm.file) {
-        vm.upload(vm.currentItem._id);
+        if (vm.currentItemReference) {
+          vm.currentItemReference.thumbnailUrl = vm.currentItem.thumbnailUrl; 
+          vm.currentItemReference.imageId = vm.currentItem.imageId;  
+        }
+        vm.upload(vm.currentItem.imageId);
       }
     };
 
@@ -103,6 +125,7 @@ angular.module('portraitManager')
               $timeout(function() {
                 console.log('have url');
                 console.log(e.target.result);
+                vm.currentItem.thumbnailUrl = e.target.result;
                 vm.thumbnailUrl = e.target.result;
               });
             };
