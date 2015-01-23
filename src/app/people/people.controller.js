@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('portraitManager')
-  .controller('PeopleCtrl', function($scope, $upload, $timeout, Restangular) {
+  .controller('PeopleCtrl', function($scope, $modal, $upload, $timeout, Restangular) {
 
     var vm = this;
     vm.currentItem = {};
@@ -44,8 +44,38 @@ angular.module('portraitManager')
       vm.editMode = true;
     };
 
+    vm.openEditor = function(item) {
+      if (item) {
+        vm.currentItemReference = item;
+        vm.currentItem = Restangular.copy(item);
+      } else {
+        vm.currentItem = {};
+        vm.currentItemReference = null;
+      }
+      var modalInstance = $modal.open({
+        templateUrl: 'app/people/person-form.html',
+        controller: 'PersonFormCtrl as vm',
+        size: 'lg',
+        resolve: {
+          item: function() {
+            return vm.currentItem;
+          }
+        }
+      });
+
+      modalInstance.result.then(vm.updateFromEditor);
+    };
+
+    vm.updateFromEditor = function(item) {
+      vm.currentItem = item;
+      if (item._id) {
+        vm.update();
+      } else {
+        vm.create();
+      }
+    };
+
     vm.create = function() {
-      vm.uploadIfModified();
       resource.post(vm.currentItem).then(function(item) {
         item.thumbnailUrl = vm.currentItem.thumbnailUrl;
         vm.collection.push(item);
@@ -57,7 +87,6 @@ angular.module('portraitManager')
     };
 
     vm.update = function() {
-      vm.uploadIfModified();
       vm.currentItem.put().then(function(item) {
         vm.currentItemReference.thumbnailUrl = vm.currentItem.thumbnailUrl;
         updateItem(vm.currentItemReference, item);
@@ -85,56 +114,4 @@ angular.module('portraitManager')
     vm.reload();
     vm.getTeachersAndGrades ();
 
-    vm.fileReaderSupported = window.FileReader != null && (window.FileAPI == null || FileAPI.html5 != false);
-
-
-    vm.fileSelected = function() {
-      var file = vm.file[0];
-      console.log(file);
-      if (file) {
-        vm.generateThumb(file);
-      }
-    };
-
-    vm.uploadIfModified = function() {
-      if (vm.file) {
-        var hash = Math.round(Math.random() * 1e16).toString(32);
-        vm.currentItem.imageId = vm.currentItem.imageId || hash;
-        if (vm.currentItemReference) {
-          vm.currentItemReference.thumbnailUrl = vm.currentItem.thumbnailUrl;
-          vm.currentItemReference.imageId = vm.currentItem.imageId;
-        }
-        vm.upload(vm.currentItem.imageId);
-      }
-    };
-
-    vm.generateThumb = function(file) {
-      if (file != null) {
-        if (vm.fileReaderSupported && file.type.indexOf('image') > -1) {
-          $timeout(function() {
-            var fileReader = new FileReader();
-            fileReader.readAsDataURL(file);
-            console.log('will read');
-            fileReader.onload = function(e) {
-              $timeout(function() {
-                console.log('have url');
-                console.log(e.target.result);
-                vm.currentItem.thumbnailUrl = e.target.result;
-              });
-            };
-          });
-        }
-      }
-    };
-
-    vm.upload = function(itemId) {
-      $upload.upload({
-        url: '/upload?personId=' + itemId,
-        file: vm.file[0]
-      }).progress(function(evt) {
-        console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :' + evt.config.file.name);
-      }).success(function(data, status, headers, config) {
-        console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
-      });
-    };
   });

@@ -2,95 +2,39 @@
 
 	<div ng-include="'components/navbar/navbar.html'"></div>
 
-	<div class="container">
-		<div class="container col-md-5">
-			<h2>People</h2>
-			<br>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>First Name</th>
-						<th>Last Name</th>
-						<th>Photo</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="item in vm.collection">
-						<td>{{item.firstName}}</td>
-						<td>{{item.lastName}}</td>
-						<td>
-							<img style="height:20px" ng-if="item.imageId && !item.thumbnailUrl" ng-src="/image?id={{item.imageId}}">
-							<img style="height:20px" ng-if="item.thumbnailUrl" ng-src="{{item.thumbnailUrl}}">
-						</td>
-						<td>
-							<!-- <div class="btn-group" role="group">
-							-->
-							<div class="action">
-								<span class="action-buttons">
-									<button ng-click="vm.edit(item)" class='btn btn-xs btn-warning'>Edit</button>
-									<button ng-click="vm.destroy(item)" class='btn btn-xs btn-danger'>Delete</button>
-								</span>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<p >{{item.name}}</p>
-		</div>
-		<div class="container col-md-1"></div>
-		<div class="container col-md-5">
-			<h2>{{vm.editMode && 'Edit' || 'Create'}}</h2>
-			<br>
-			<form role="form">
-				<div class="form-group">
-					<label for="first_name">First name:</label>
-					<input ng-model="vm.currentItem.firstName" class="form-control" id="first_name"></div>
-				<div class="form-group">
-					<label for="last_name">Last name:</label>
-					<input ng-model="vm.currentItem.lastName" class="form-control" id="last_name"></div>
-				<div class="form-group">
-					<label for="teacher">Teacher:</label>
-					<select ng-options="teacher._id as teacher.lastName + ' ' + teacher.firstName for teacher in vm.teachers" ng-model="vm.currentItem.teacher" class="form-control" id="teacher">
-					  <option value="">-- choose teacher --</option>
-					</select>
-				</div>
-				<div class="form-group">
-					<label for="grade">Grade:</label>
-					<select ng-options="grade._id as grade.name for grade in vm.grades" ng-model="vm.currentItem.grade" class="form-control" id="grade">
-					  <option value="">-- choose grade --</option>
-					</select>
-				</div>
-				<div class="form-group">
-					<label >Photo:</label>
-					<br>
-					<button ng-hide="vm.currentItem.thumbnailUrl || vm.currentItem.imageId" ng-file-select="" ng-file-change="vm.fileSelected()" class="btn btn-info btn-lg" ng-model="vm.file">Attach</button>
-					<br>
-					<div class="hover-pointer" ng-file-select="" ng-file-change="vm.fileSelected()" ng-model="vm.file">
-						<img ng-hide="vm.currentItem.thumbnailUrl" style="width:300px;" ng-if="vm.currentItem.imageId" ng-src="/image?id={{vm.currentItem.imageId}}">
-						<img ng-show="vm.currentItem.thumbnailUrl" style="width:300px;" ng-if="vm.currentItem.thumbnailUrl" ng-src="{{vm.currentItem.thumbnailUrl}}"></div>
-				</div>
-
-			</form>
-			<br>
-			<button ng-hide="vm.editMode" class="btn btn-success" ng-click="vm.create()">
-				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-				Create
-			</button>
-			<span ng-show="vm.editMode">
-				<button class="btn btn-warning" ng-click="vm.update()">
-					<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-					Update
-				</button>
-				<button class="btn btn-danger" ng-click="vm.cancel()">
-					<span class="glyphicon glyphicon-cross" aria-hidden="true"></span>
-					Cancel
-				</button>
-			</span>
-
-			<br/>
-			<br/>
-
-		</div>
+	<div class="container col-sm-12">
+		<h2>People</h2>
+		<button ng-hide="vm.editMode" class="btn btn-success" ng-click="vm.openEditor()">
+			<span class="glyphicon glyphicon-plus"/>
+			Add
+		</button>
+		<br>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Photo</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in vm.collection">
+					<td>{{item.firstName}}</td>
+					<td>{{item.lastName}}</td>
+					<td>
+						<img style="height:20px" ng-if="item.imageId && !item.thumbnailUrl" ng-src="/image?id={{item.imageId}}">
+						<img style="height:20px" ng-if="item.thumbnailUrl" ng-src="{{item.thumbnailUrl}}"></td>
+					<td>
+						<div class="action">
+							<span class="action-buttons">
+								<button ng-click="vm.openEditor(item)" class='btn btn-xs btn-warning'>Edit</button>
+								<button ng-click="vm.destroy(item)" class='btn btn-xs btn-danger'>Delete</button>
+							</span>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>
