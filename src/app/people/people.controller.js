@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('portraitManager')
-  .controller('PeopleCtrl', function($scope, $modal, $upload, $timeout, Restangular) {
+  .controller('PeopleCtrl', function($scope, $modal, $upload, $timeout, Restangular, imageRepoUrl) {
 
     var vm = this;
     vm.currentItem = {};
     vm.editMode = false;
+    vm.imageRepoUrl = imageRepoUrl;
 
     var resource = Restangular.all('people');
     var teachers = Restangular.all('teachers');

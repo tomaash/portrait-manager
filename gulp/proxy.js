@@ -21,7 +21,7 @@
  /*
   * Location of your backend server
   */
- var proxyTarget = 'http://localhost:5000/';
+ var proxyTarget = 'http://localhost:5001/';
 
  var proxy = httpProxy.createProxyServer({
    target: proxyTarget

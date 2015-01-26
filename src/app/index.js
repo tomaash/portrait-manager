@@ -29,4 +29,4 @@ angular.module('portraitManager', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanit
     RestangularProvider.setRestangularFields({
       id: '_id'
     });
-  });
+  }).value('imageRepoUrl', 'https://image-repo.herokuapp.com');

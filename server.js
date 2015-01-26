@@ -90,7 +90,7 @@ baucis.rest('teacher');
 baucis.rest('grade');
 
 // Start server
-var port = process.env.PORT || 5000;
+var port = process.env.PORT || 5001;
 app.use(cors());
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 app.use('/', express.static(__dirname + '/dist'));
