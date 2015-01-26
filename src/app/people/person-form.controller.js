@@ -51,6 +51,7 @@ angular.module('portraitManager')
     };
 
     vm.generateThumb = function(file) {
+      console.log(file);
       if (file != null) {
         if (vm.fileReaderSupported && file.type.indexOf('image') > -1) {
           $timeout(function() {
