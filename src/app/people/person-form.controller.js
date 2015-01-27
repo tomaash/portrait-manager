@@ -6,16 +6,31 @@ angular.module('portraitManager')
     vm.teachers = teachers;
     vm.grades = grades;
 
+    $timeout(function() {
+      $("input:file").change(function() {
+        var fileName = $(this).val();
+        console.log(fileName);
+        vm.generateThumbIfChanged();
+      });
+    }, 0);
+
     vm.progress = {
       show: false,
       percent: 0
     };
 
-    $scope.$watch('vm.file', function(val) {
-      if (val) {
+    vm.generateThumbIfChanged = function() {
+      if (vm.file && vm.file[0]) {
         vm.generateThumb(vm.file[0]);
       }
-    });
+    };
+
+    vm.change = function() {
+      console.log('change!');
+      console.log(vm.file[0]);
+    };
+
+    // $scope.$watch('vm.file', vm.generateThumbIfChanged);
 
     vm.imageRepoUrl = imageRepoUrl;
 

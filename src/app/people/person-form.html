@@ -21,15 +21,13 @@
 				<option value="">-- choose grade --</option>
 			</select>
 		</div>
-		<div class="form-group col-sm-12">
+		<div class="form-group col-sm-12 hover-pointer" ng-file-select  ng-model="vm.file">
 			<label >Photo:</label>
 			<br>
-			<button ng-hide="vm.currentItem.thumbnailUrl || vm.currentItem.imageId" ng-file-select="" ng-file-change="vm.fileSelected()" class="btn btn-info btn-lg" ng-model="vm.file">Attach</button>
+			<button ng-hide="vm.currentItem.thumbnailUrl || vm.currentItem.imageId" class="btn btn-info btn-lg" >Attach</button>
 			<br>
-			<div class="hover-pointer" ng-file-select="" ng-model="vm.file">
-				<img ng-hide="vm.currentItem.thumbnailUrl" style="width:300px;" ng-if="vm.currentItem.imageId" ng-src="{{vm.imageRepoUrl}}/api_1_0/images/blob/{{vm.currentItem.imageId}}">
-				<img ng-show="vm.currentItem.thumbnailUrl" style="width:300px;" ng-if="vm.currentItem.thumbnailUrl" ng-src="{{vm.currentItem.thumbnailUrl}}"></div>
-		</div>
+			<img ng-hide="vm.currentItem.thumbnailUrl" style="width:300px;" ng-if="vm.currentItem.imageId" ng-src="{{vm.imageRepoUrl}}/api_1_0/images/blob/{{vm.currentItem.imageId}}">
+			<img ng-show="vm.currentItem.thumbnailUrl" style="width:300px;" ng-if="vm.currentItem.thumbnailUrl" ng-src="{{vm.currentItem.thumbnailUrl}}"></div>
 
 	</form>
 </div>
