@@ -26,7 +26,7 @@
 			<br>
 			<button ng-hide="vm.currentItem.thumbnailUrl || vm.currentItem.imageId" ng-file-select="" ng-file-change="vm.fileSelected()" class="btn btn-info btn-lg" ng-model="vm.file">Attach</button>
 			<br>
-			<div class="hover-pointer" ng-file-select="" ng-file-change="vm.fileSelected()" ng-model="vm.file">
+			<div class="hover-pointer" ng-file-select="" ng-model="vm.file">
 				<img ng-hide="vm.currentItem.thumbnailUrl" style="width:300px;" ng-if="vm.currentItem.imageId" ng-src="{{vm.imageRepoUrl}}/api_1_0/images/blob/{{vm.currentItem.imageId}}">
 				<img ng-show="vm.currentItem.thumbnailUrl" style="width:300px;" ng-if="vm.currentItem.thumbnailUrl" ng-src="{{vm.currentItem.thumbnailUrl}}"></div>
 		</div>
@@ -34,12 +34,20 @@
 	</form>
 </div>
 <div class="modal-footer">
-	<button ng-hide="vm.editMode" class="btn btn-success" ng-click="vm.ok()">
+	<div class="col-sm-8" ng-show="vm.progress.show">
+		<div class="progress upload-progress">
+			<div class="progress-bar" role="progressbar" aria-valuenow="{{vm.progress.percent}}" aria-valuemin="0" aria-valuemax="100" style="width: {{vm.progress.percent}}%;">{{vm.progress.percent}}%</div>
+		</div>
+	</div>
+	<div class="col-sm-8" ng-show="vm.progress.error" >
+		<div class="alert alert-danger alert-upload" role="alert">{{vm.progress.error}}</div>
+	</div>
+	<button ng-disabled="vm.progress.show" ng-hide="vm.editMode" class="btn btn-success" ng-click="vm.ok()">
 		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 		Create
 	</button>
 	<span ng-show="vm.editMode">
-		<button class="btn btn-warning" ng-click="vm.ok()">
+		<button ng-disabled="vm.progress.show" class="btn btn-warning" ng-click="vm.ok()">
 			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 			Update
 		</button>

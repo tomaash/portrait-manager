@@ -6,7 +6,12 @@ angular.module('portraitManager')
     vm.teachers = teachers;
     vm.grades = grades;
 
-    $scope.$watch('vm.file', function(val){
+    vm.progress = {
+      show: false,
+      percent: 0
+    };
+
+    $scope.$watch('vm.file', function(val) {
       if (val) {
         vm.generateThumb(vm.file[0]);
       }
@@ -40,22 +45,6 @@ angular.module('portraitManager')
 
     vm.fileReaderSupported = window.FileReader != null && (window.FileAPI == null || FileAPI.html5 != false);
 
-    vm.fileSelected = function() {
-      // var file = vm.file[0];
-      // console.log(file);
-      // if (file) {
-      //   vm.generateThumb(file);
-      // }
-    };
-
-    // vm.uploadIfModified = function(callback) {
-    //   if (vm.file) {
-    //     var hash = Math.round(Math.random() * 1e16).toString(32);
-    //     vm.currentItem.imageId = vm.currentItem.imageId || hash;
-    //     vm.upload(vm.currentItem.imageId, callback);
-    //   }
-    // };
-
     vm.generateThumb = function(file) {
       console.log(file);
       if (file != null) {
@@ -77,8 +66,10 @@ angular.module('portraitManager')
     };
 
     vm.upload = function(itemId, callback) {
+      vm.progress.show = true;
+      vm.progress.error = null;
       $upload.upload({
-        url: vm.imageRepoUrl+'/api_1_0/images',
+        url: vm.imageRepoUrl + '/api_1_0/images',
         file: vm.file[0],
         data: {
           name: itemId,
@@ -96,10 +87,17 @@ angular.module('portraitManager')
         // url: '/upload?personId=' + itemId,
         // file: vm.file[0]
       }).progress(function(evt) {
-        console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :' + evt.config.file.name);
+        vm.progress.percent = parseInt(100.0 * evt.loaded / evt.total, 10);
+        console.log('progress: ' + vm.progress.percent + '% file :' + evt.config.file.name);
       }).success(function(data, status, headers, config) {
+        vm.progress.show = false;
         console.log('file ' + config.file.name + 'is uploaded successfully. Response: ' + data);
         callback(data);
+      }).error(function(evt) {
+        vm.progress.show = false;
+        vm.progress.error = 'Upload failed';
+        console.log('error');
+        console.log(evt);
       });
     };
   });
