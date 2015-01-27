@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('portraitManager')
-  .controller('TeachersCtrl', function($scope, $upload, Restangular) {
+.controller('TeachersCtrl', function($scope, $upload, Restangular, editModal) {
 
     var vm = this;
     vm.currentItem = {};
@@ -9,15 +9,18 @@ angular.module('portraitManager')
 
     var resource = Restangular.all('teachers');
 
+    vm.openEditor = function (item) {
+      editModal.open (item, {
+        vm: vm,
+        templateUrl: 'app/teachers/teacher-form.html',
+        size: 'md'
+      });
+    };
+
     vm.reload = function() {
       resource.getList().then(function(data) {
         vm.collection = data;
       });
-    };
-
-    vm.edit = function(item) {
-      vm.currentItem = Restangular.copy(item);
-      vm.editMode = true;
     };
 
     vm.create = function() {
