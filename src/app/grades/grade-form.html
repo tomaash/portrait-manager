@@ -1,0 +1,25 @@
+<div class="modal-header">
+	<h3 class="modal-title">{{vm.editMode && 'Edit' || 'Create'}} Grade</h3>
+<div class="modal-body col-sm-12">
+	<form role="form">
+		<div class="form-group">
+			<label for="name">Name:</label>
+			<input ng-model="vm.currentItem.name" class="form-control" id="name"></div>
+	</form>
+</div>
+<div class="modal-footer">
+	<button ng-hide="vm.editMode" class="btn btn-success" ng-click="vm.ok()">
+		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+		Create
+	</button>
+	<span ng-show="vm.editMode">
+		<button class="btn btn-warning" ng-click="vm.ok()">
+			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+			Update
+		</button>
+	</span>
+	<button class="btn btn-danger" ng-click="vm.cancel()">
+		<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		Cancel
+	</button>
+</div>
