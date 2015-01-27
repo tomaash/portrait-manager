@@ -6,6 +6,12 @@ angular.module('portraitManager')
     vm.teachers = teachers;
     vm.grades = grades;
 
+    $scope.$watch('vm.file', function(val){
+      if (val) {
+        vm.generateThumb(vm.file[0]);
+      }
+    });
+
     vm.imageRepoUrl = imageRepoUrl;
 
     if (item._id) {
@@ -35,20 +41,20 @@ angular.module('portraitManager')
     vm.fileReaderSupported = window.FileReader != null && (window.FileAPI == null || FileAPI.html5 != false);
 
     vm.fileSelected = function() {
-      var file = vm.file[0];
-      console.log(file);
-      if (file) {
-        vm.generateThumb(file);
-      }
+      // var file = vm.file[0];
+      // console.log(file);
+      // if (file) {
+      //   vm.generateThumb(file);
+      // }
     };
 
-    vm.uploadIfModified = function(callback) {
-      if (vm.file) {
-        var hash = Math.round(Math.random() * 1e16).toString(32);
-        vm.currentItem.imageId = vm.currentItem.imageId || hash;
-        vm.upload(vm.currentItem.imageId, callback);
-      }
-    };
+    // vm.uploadIfModified = function(callback) {
+    //   if (vm.file) {
+    //     var hash = Math.round(Math.random() * 1e16).toString(32);
+    //     vm.currentItem.imageId = vm.currentItem.imageId || hash;
+    //     vm.upload(vm.currentItem.imageId, callback);
+    //   }
+    // };
 
     vm.generateThumb = function(file) {
       console.log(file);
