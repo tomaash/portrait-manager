@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('portraitManager')
-  .controller('PeopleCtrl', function($scope, $modal, $upload, $timeout, Restangular, imageRepoUrl) {
+.controller('PeopleCtrl', function($scope, $upload, $timeout, Restangular, imageRepoUrl, editModal) {
 
     var vm = this;
     vm.currentItem = {};
@@ -50,47 +50,21 @@ angular.module('portraitManager')
       });
     };
   
-    vm.edit = function(item) {
-      vm.currentItemReference = item;
-      vm.currentItem = Restangular.copy(item);
-      vm.editMode = true;
-    };
-
     vm.openEditor = function(item) {
-      if (item) {
-        vm.currentItemReference = item;
-        vm.currentItem = Restangular.copy(item);
-      } else {
-        vm.currentItem = {};
-        vm.currentItemReference = null;
-      }
-      var modalInstance = $modal.open({
+      editModal.open (item, {
+        vm: vm,
         templateUrl: 'app/people/person-form.html',
-        controller: 'PersonFormCtrl as vm',
+        controller: 'PersonFormCtrl',
         size: 'lg',
         resolve: {
-          item: function() {
-            return vm.currentItem;
-          },
           teachers: function () {
             return vm.teachers;
           },
           grades: function () {
             return vm.grades;
           }
-        }
+        }        
       });
-
-      modalInstance.result.then(vm.updateFromEditor);
-    };
-
-    vm.updateFromEditor = function(item) {
-      vm.currentItem = item;
-      if (item._id) {
-        vm.update();
-      } else {
-        vm.create();
-      }
     };
 
     vm.create = function() {
