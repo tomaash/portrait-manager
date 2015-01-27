@@ -6,12 +6,11 @@ angular.module('portraitManager')
     vm.teachers = teachers;
     vm.grades = grades;
 
+    // Watch file change with jquery due to ng-angular-upload bug
     $timeout(function() {
-      $("input:file").change(function() {
-        var fileName = $(this).val();
-        console.log(fileName);
-        vm.generateThumbIfChanged();
-      });
+      $('input:file')
+      .off('change', vm.generateThumbIfChanged)
+      .on('change', vm.generateThumbIfChanged);
     }, 0);
 
     vm.progress = {
@@ -24,13 +23,6 @@ angular.module('portraitManager')
         vm.generateThumb(vm.file[0]);
       }
     };
-
-    vm.change = function() {
-      console.log('change!');
-      console.log(vm.file[0]);
-    };
-
-    // $scope.$watch('vm.file', vm.generateThumbIfChanged);
 
     vm.imageRepoUrl = imageRepoUrl;
 
