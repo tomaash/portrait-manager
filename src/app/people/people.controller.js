@@ -132,6 +132,11 @@ angular.module('portraitManager')
       vm.currentItem = {};
     };
 
+    vm.updateFilterAndSelectors = function () {
+      vm.selectedEntity = {};
+      angular.element (".need-reset").css ('display', 'none');
+    };
+
     vm.reload();
     vm.getTeachersAndGrades();
 

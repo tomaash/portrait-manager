@@ -15,26 +15,24 @@
 			    <label for="selection-by">Select: </label>
 			    <select id="selection-by" ng-model="vm.selectionBy"
 				    ng-options="opt for opt in vm.selectOptions"
-				    ng-change="vm.selectedEntity={}"
+				    ng-change="vm.updateFilterAndSelectors()"
 				    class="form-control">
 			    </select>
 		     </div>
 		     <div ng-switch="vm.selectionBy" class="form-group col-xs-12
 				    col-sm-2">
-		        <select ng-switch-when="All" ng-disabled="true"
-				class="form-control">
-			  <option value="">-- choose --</option>
-			</select>
 			<select ng-switch-when="Teacher"
 				ng-change="vm.selectedEntity.teacher || (vm.selectedEntity={})"
 				ng-options="teacher._id as teacher.lastName + ' ' + teacher.firstName for teacher in vm.teachers"
-				ng-model="vm.selectedEntity.teacher" class="form-control"> 
+				ng-model="vm.selectedEntity.teacher"
+				class="form-control need-reset"> 
 				<option value="">-- choose --</option>
 			</select>
 			<select ng-switch-when="Grade"
 				ng-change="vm.selectedEntity.grade || (vm.selectedEntity={})"
 				ng-options="grade._id as grade.name for grade in vm.grades"
-				ng-model="vm.selectedEntity.grade" class="form-control"> 
+				ng-model="vm.selectedEntity.grade"
+				class="form-control need-reset"> 
 				<option value="">-- choose --</option>
 			</select>
                      </div>
