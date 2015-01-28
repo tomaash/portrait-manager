@@ -9,36 +9,21 @@
 			Add
 		</button>
 		<br>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>First Name</th>
-					<th>Last Name</th>
-					<th>Photo</th>
-					<th>Teacher</th>
-					<th>Grade</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="item in vm.collection">
-					<td>{{item.firstName}}</td>
-					<td>{{item.lastName}}</td>
-					<td>
-						<img style="height:20px" ng-if="item.imageId && !item.thumbnailUrl" ng-src="{{vm.imageRepoUrl}}/api_1_0/images/blob/{{item.imageId}}">
-						<img style="height:20px" ng-if="item.thumbnailUrl" ng-src="{{item.thumbnailUrl}}"></td>
-					<td>{{vm.teachersCache[item.teacher].lastName + ' ' + vm.teachersCache[item.teacher].firstName}}</td>
-					<td>{{vm.gradesCache[item.grade].name}}</td>
-					<td>
-						<div class="action">
-							<span class="action-buttons">
-								<button ng-click="vm.openEditor(item)" class='btn btn-xs btn-warning'>Edit</button>
-								<button ng-click="vm.destroy(item)" class='btn btn-xs btn-danger'>Delete</button>
-							</span>
-						</div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<br>
+		<div>
+			<div ng-repeat="item in vm.collection" class="portrait">
+
+				<div ng-if="vm.imageForItem(item)" class="center-cropped" 
+     style="background-image: url('{{vm.imageForItem(item)}}');" ng-click="vm.openViewer(item)"></div>
+
+				<div class="name">{{item.firstName}} {{item.lastName}}</div>
+				<div class="round-button top-right" ng-click="vm.destroy(item)">
+					<span class="glyphicon glyphicon-remove white"></span>
+				</div>
+				<div class="round-button top-right under" ng-click="vm.openEditor(item)">
+					<span class="glyphicon glyphicon-edit white"></span>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>

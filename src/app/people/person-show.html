@@ -1,0 +1,18 @@
+<div class="modal-header">
+	<h3 class="modal-title">{{vm.currentItem.firstName}} {{vm.currentItem.lastName}}</h3>
+</div>
+<div class="modal-body col-sm-12">
+	<div class="col-sm-6">
+		<img class="show-portrait" ng-if="vm.currentItem.imageId" ng-src="{{vm.imageRepoUrl}}/api_1_0/images/blob/{{vm.currentItem.imageId}}"></div>
+	<div class="col-sm-6"> <b>Teacher:</b>
+		<br>
+		{{vm.teacher.firstName}} {{vm.teacher.lastName}}
+		<br> <b>Grade:</b>
+		<br>{{vm.grade.name}}</div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" ng-click="vm.close()">
+		<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		Close
+	</button>
+</div>

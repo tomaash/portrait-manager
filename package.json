@@ -39,6 +39,7 @@
     "karma-phantomjs-launcher": "~0.1.4",
     "main-bower-files": "~2.4.0",
     "mongoose": "^3.8.21",
+    "mongoose-json-select": "^0.2.1",
     "protractor": "~1.4.0",
     "require-dir": "~0.1.0",
     "uglify-save-license": "~0.4.1",

@@ -6,7 +6,7 @@ var cors = require('cors');
 var gcloud = require('gcloud');
 var Busboy = require('busboy');
 var app = express();
-
+var jsonSelect = require('mongoose-json-select');
 
 // Choose database
 if (app.get('env') === 'development') {
@@ -55,6 +55,19 @@ app.get('/image', function(req, res) {
 	stream.pipe(res);
 });
 
+var rejectEmptyObject = function(req, res, next) {
+	req.baucis.incoming(function(doc, callback) {
+    if (Object.getOwnPropertyNames(doc.incoming).length === 0) {
+      res.status(409).send('Cannot save empty object');
+      console.log(doc);
+      console.log('Empty object filtered out from saving');
+      return;
+    }
+    callback(null, doc);
+	});
+	next();
+};
+
 
 // Define schemas
 var Person = new mongoose.Schema({
@@ -80,14 +93,18 @@ var Grade = new mongoose.Schema({
 	name: String
 });
 
+Person.plugin(jsonSelect, '-__v');
+Teacher.plugin(jsonSelect, '-__v');
+Grade.plugin(jsonSelect, '-__v');
+
 mongoose.model('person', Person);
 mongoose.model('teacher', Teacher);
 mongoose.model('grade', Grade);
 
 // Create REST API
-baucis.rest('person');
-baucis.rest('teacher');
-baucis.rest('grade');
+baucis.rest('person').request(rejectEmptyObject);
+baucis.rest('teacher').request(rejectEmptyObject);
+baucis.rest('grade').request(rejectEmptyObject);
 
 // Start server
 var port = process.env.PORT || 5001;

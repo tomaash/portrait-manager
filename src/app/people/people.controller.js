@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('portraitManager')
-.controller('PeopleCtrl', function($scope, $upload, $timeout, Restangular, imageRepoUrl, editModal) {
+  .controller('PeopleCtrl', function($scope, $upload, $timeout, Restangular, imageRepoUrl, editModal) {
 
     var vm = this;
     vm.currentItem = {};
@@ -26,11 +26,19 @@ angular.module('portraitManager')
       });
     };
 
-    var makeCache = function (list) {
-      return _.reduce (list, function (cache, item) {
-               cache [item._id] = item;
-               return cache;
-             }, {});
+    var makeCache = function(list) {
+      return _.reduce(list, function(cache, item) {
+        cache[item._id] = item;
+        return cache;
+      }, {});
+    };
+
+    vm.imageForItem = function(item) {
+      if (item.imageId && !item.thumbnailUrl) {
+        return vm.imageRepoUrl + '/api_1_0/images/blob/' + item.imageId;
+      } else {
+        return item.thumbnailUrl;
+      }
     };
 
     vm.reload = function() {
@@ -39,31 +47,48 @@ angular.module('portraitManager')
       });
     };
 
-    vm.getTeachersAndGrades = function () {
-      teachers.getList ().then (function (data) {
+    vm.getTeachersAndGrades = function() {
+      teachers.getList().then(function(data) {
         vm.teachers = data;
-        vm.teachersCache = makeCache (data);
+        vm.teachersCache = makeCache(data);
       });
-      grades.getList ().then (function (data) {
+      grades.getList().then(function(data) {
         vm.grades = data;
-        vm.gradesCache = makeCache (data);
+        vm.gradesCache = makeCache(data);
       });
     };
-  
+
     vm.openEditor = function(item) {
-      editModal.open (item, {
+      editModal.open(item, {
         vm: vm,
         templateUrl: 'app/people/person-form.html',
         controller: 'PersonFormCtrl',
         size: 'lg',
         resolve: {
-          teachers: function () {
+          teachers: function() {
             return vm.teachers;
           },
-          grades: function () {
+          grades: function() {
             return vm.grades;
           }
-        }        
+        }
+      });
+    };
+
+    vm.openViewer = function(item) {
+      editModal.open(item, {
+        vm: vm,
+        templateUrl: 'app/people/person-show.html',
+        controller: 'ShowModalController',
+        size: 'lg',
+        resolve: {
+          teacher: function() {
+            return vm.teachersCache[item.teacher];
+          },
+          grade: function() {
+            return vm.gradesCache[item.grade];
+          }
+        }
       });
     };
 
@@ -104,6 +129,6 @@ angular.module('portraitManager')
     };
 
     vm.reload();
-    vm.getTeachersAndGrades ();
+    vm.getTeachersAndGrades();
 
   });
