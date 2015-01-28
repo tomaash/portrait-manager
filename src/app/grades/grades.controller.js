@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('portraitManager')
-.controller('GradesCtrl', function($scope, $upload, Restangular, editModal) {
+.controller('GradesCtrl', function($scope, $upload, $state, Restangular, editModal) {
 
     var vm = this;
     vm.currentItem = {};
@@ -48,6 +48,11 @@ angular.module('portraitManager')
     vm.cancel = function() {
       vm.editMode = false;
       vm.currentItem = {};
+    };
+
+    vm.openPortraits = function (item) {
+      $state.go ('people-opt', {selectionType : 'Grade',
+                                selectionValue : item._id});
     };
 
     vm.reload();
