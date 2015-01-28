@@ -8,6 +8,10 @@ angular.module('portraitManager')
     vm.editMode = false;
     vm.imageRepoUrl = imageRepoUrl;
 
+    vm.selectOptions = ['All', 'Teacher', 'Grade'];
+    vm.selectionBy = 'All';
+    vm.selectedEntity = {};
+
     var resource = Restangular.all('people');
     var teachers = Restangular.all('teachers');
     var grades = Restangular.all('grades');
