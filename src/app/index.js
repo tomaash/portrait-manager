@@ -13,7 +13,12 @@ angular.module('portraitManager', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanit
       templateUrl: 'app/people/people.html',
       controller: 'PeopleCtrl as vm'
     })
-      .state('teachers', {
+    .state('people-opt', {
+      url: '/people/:selectionType/:selectionValue',
+      templateUrl: 'app/people/people.html',
+      controller: 'PeopleCtrl as vm'
+    })
+    .state('teachers', {
         url: '/teachers',
         templateUrl: 'app/teachers/teachers.html',
         controller: 'TeachersCtrl as vm'

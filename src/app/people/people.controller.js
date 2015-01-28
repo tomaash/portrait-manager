@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('portraitManager')
-  .controller('PeopleCtrl', function($scope, $upload, $timeout, Restangular, imageRepoUrl, editModal) {
+.controller('PeopleCtrl', function($scope, $upload, $timeout, $stateParams, Restangular, imageRepoUrl, editModal) {
 
     var vm = this;
     vm.currentItem = {};
@@ -9,8 +9,11 @@ angular.module('portraitManager')
     vm.imageRepoUrl = imageRepoUrl;
 
     vm.selectOptions = ['All', 'Teacher', 'Grade'];
-    vm.selectionBy = 'All';
+    vm.selectionBy = $stateParams.selectionType || 'All';
     vm.selectedEntity = {};
+    if ($stateParams.selectionValue) {
+      vm.selectedEntity[vm.selectionBy.toLowerCase()] = $stateParams.selectionValue;
+    }
 
     var resource = Restangular.all('people');
     var teachers = Restangular.all('teachers');
