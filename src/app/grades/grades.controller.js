@@ -4,11 +4,11 @@ angular.module('portraitManager')
 .controller('GradesCtrl', function(CtrlService) {
 
   CtrlService.create (this, {
-      templateUrl: 'app/grades/grade-form.html',
-      size: 'md',
-      state: 'people-opt',
-      selectionType : 'Grade',
-      what: 'grades'
-    });
-
+    templateUrl: 'app/grades/grade-form.html',
+    size: 'md',
+    portraitState: 'people-opt',
+    portraitSelectionType : 'Grade',
+    what: 'grades'
   });
+
+});

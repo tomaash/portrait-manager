@@ -53,8 +53,8 @@ angular.module('portraitManager')
       };
 
       vm.openPortraits = function (item) {
-        $state.go (cfg.state, {selectionType : cfg.selectionType,
-                               selectionValue : item._id});
+        $state.go (cfg.portraitState, {selectionType : cfg.portraitSelectionType,
+                                       selectionValue : item._id});
       };
       
       vm.reload();
